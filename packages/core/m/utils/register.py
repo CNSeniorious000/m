@@ -11,8 +11,6 @@ def get_commands():
         module = import_module(f"m.commands.{info.name}")
         app = getattr(module, "app")
         if isinstance(app, Typer):
-            if not app.info.name:
-                app.info.name = info.name
             yield app
         elif app is None:
             print(f"{info.name} is not a command")

@@ -19,7 +19,7 @@ def version():
 # load other commands
 
 for sub_app in get_commands():
-    if app.info.name:
+    if sub_app.info.name:
         app.add_typer(sub_app)
     else:
         app.registered_commands.extend(sub_app.registered_commands)
