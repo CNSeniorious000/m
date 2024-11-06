@@ -1,9 +1,7 @@
-from sys import argv
-
 from typer import Typer
 
 from ..config.load import load_config
-from ..utils.console import console
+from ..utils.cmd import get_runner
 from ..utils.register import get_commands
 
 app = Typer(help="CLI utilities for personal use", no_args_is_help=True, add_completion=False)
@@ -23,14 +21,9 @@ for sub_app in get_commands():
 config = load_config()
 
 for alias, command in config["aliases"].items():
-
-    @app.command(name=alias, help=f"alias of {command!r}", context_settings={"allow_extra_args": True, "ignore_unknown_options": True})
-    def _(cmd=command):
-        from shlex import split
-        from subprocess import Popen
-
-        console.print("\n [d]>>", *split(cmd), end=" ", style="violet")
-        console.print(" ".join(argv[2:]), style="yellow", end="\n\n")
-
-        code = Popen(split(cmd) + argv[2:]).wait()
-        exit(code)
+    app.command(
+        name=alias,
+        help=f"alias of {command!r}",
+        context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+        add_help_option=False,
+    )(get_runner(command))

@@ -1,9 +1,10 @@
-from rich import print, print_json
+from m.utils.console import console
 from typer import Typer
 from typer.params import Argument, Option
 
 from ..config.load import load_config, read_json_config, write_json_config
-from ..config.types import Config
+from ..config.types import Alias, Config
+from ..utils.cmd import print_command
 from ..utils.helpers import wrap_raw_config
 from ..utils.path import global_store, local_store
 
@@ -14,6 +15,7 @@ app = Typer()
 def alias(
     alias: str = Argument("", help="The alias to create or retrieve."),
     command: str = Argument("", help="The command to alias."),
+    shell: bool = Option(False, "--shell", "-s", flag_value=True, help="Use shell to execute the command."),
     local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent alias in User's home directory instead of this python venv."),
 ):
     store = local_store if local else global_store
@@ -22,16 +24,27 @@ def alias(
     match (alias, command):
         case ("", ""):
             if aliases := config["aliases"]:
-                print_json(data=aliases)
+                max_len = max(map(len, aliases))
+                print()
+                for alias, item in aliases.items():
+                    if isinstance(item, dict):
+                        cmd, shell = item["cmd"], item["shell"]
+                    else:
+                        cmd, shell = item, False
+                    console.print(f" {alias.rjust(max_len)}: [{'green' if shell else 'blue' }]{cmd}")
+                print()
 
         case (alias, ""):
-            if command := config["aliases"][alias]:
-                print(command)
+            if isinstance(item := config["aliases"][alias], str):
+                print_command(item)
+            elif isinstance(item, dict):
+                print_command(item["cmd"], item["shell"])
 
         case (alias, command):
             new_config: Config = dict(config) if isinstance(config, dict) else {}  # type: ignore
+            item: Alias | str = {"cmd": command, "shell": shell} if shell else command
             if config["aliases"]:
-                new_config["aliases"][alias] = command
+                new_config["aliases"][alias] = item
             else:
-                new_config["aliases"] = {alias: command}
+                new_config["aliases"] = {alias: item}
             write_json_config(store, new_config)
