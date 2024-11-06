@@ -3,17 +3,10 @@ from sys import argv
 from typer import Typer
 
 from ..config.load import load_config
-from ..utils.console import console, print_version
+from ..utils.console import console
 from ..utils.register import get_commands
 
 app = Typer(help="CLI utilities for personal use", no_args_is_help=True, add_completion=False)
-
-
-@app.command()
-def version():
-    """Print the version of `m` and Python and quit."""
-
-    print_version()
 
 
 # load other commands
