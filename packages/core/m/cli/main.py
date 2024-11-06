@@ -1,8 +1,7 @@
 from typer import Typer
 
-from ..config.load import load_config
-from ..utils.cmd import get_runner
 from ..utils.register import get_commands
+from . import config
 
 app = Typer(help="CLI utilities for personal use", no_args_is_help=True, add_completion=False)
 
@@ -18,12 +17,6 @@ for sub_app in get_commands():
 
 # load aliases
 
-config = load_config()
 
 for alias, command in config["aliases"].items():
-    app.command(
-        name=alias,
-        help=f"alias of {command!r}",
-        context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
-        add_help_option=False,
-    )(get_runner(command))
+    app.command(name=alias, help=f"alias of {command!r}")(lambda: 0)  # fake
