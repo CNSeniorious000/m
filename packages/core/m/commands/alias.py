@@ -2,7 +2,7 @@ from rich import print, print_json
 from typer import Typer
 from typer.params import Argument, Option
 
-from ..config.load import read_json_config, write_json_config
+from ..config.load import load_config, read_json_config, write_json_config
 from ..config.types import Config
 from ..utils.helpers import wrap_raw_config
 from ..utils.path import global_store, local_store
@@ -17,8 +17,7 @@ def alias(
     local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent alias in User's home directory instead of this python venv."),
 ):
     store = local_store if local else global_store
-
-    config = wrap_raw_config(read_json_config(store))
+    config = wrap_raw_config(read_json_config(store)) if command else load_config()  # merge unless the verb is set
 
     match (alias, command):
         case ("", ""):
