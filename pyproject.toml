@@ -17,7 +17,7 @@ members = ["packages/*"]
 typeCheckingMode = "standard"
 
 [tool.ruff]
-line-length = 160
+line-length = 180
 
 [tool.ruff.lint]
 extend-select = [

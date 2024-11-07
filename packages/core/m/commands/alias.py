@@ -16,7 +16,7 @@ def alias(
     alias: str = Argument("", help="The alias to create or retrieve."),
     command: str = Argument("", help="The command to alias."),
     shell: bool = Option(False, "--shell", "-s", flag_value=True, help="Use shell to execute the command."),
-    local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent alias in User's home directory instead of this python venv."),
+    local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent alias in User's home directory instead of this python venv.", show_default=False),
 ):
     store = local_store if local else global_store
     config = wrap_raw_config(read_json_config(store)) if command else load_config()  # merge unless the verb is set
