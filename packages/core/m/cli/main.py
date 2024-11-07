@@ -17,6 +17,5 @@ for sub_app in get_commands():
 
 # load aliases
 
-
-for alias, command in config["aliases"].items():
-    app.command(name=alias, help=f"alias of {command!r}")(lambda: 0)  # fake
+for alias, item in config["aliases"].items():
+    app.command(name=alias, help=f"alias of {item if isinstance(item, str) else item['cmd']!r}")(lambda: 0)  # fake
