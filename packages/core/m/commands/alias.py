@@ -1,10 +1,10 @@
-from m.utils.console import console
 from typer import Typer
 from typer.params import Argument, Option
 
 from ..config.load import load_config, read_json_config, write_json_config
 from ..config.types import Alias, Config
 from ..utils.cmd import print_command
+from ..utils.console import console
 from ..utils.helpers import wrap_raw_config
 from ..utils.path import global_store, local_store
 

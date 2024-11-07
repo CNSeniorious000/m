@@ -1,9 +1,8 @@
 import re
 from sys import argv
 
-from m.utils.console import console
-
 from ..config.types import Alias
+from ..utils.console import console
 
 unsafe = re.compile(r"['\" ]", re.ASCII).search  # copied from shlex
 
