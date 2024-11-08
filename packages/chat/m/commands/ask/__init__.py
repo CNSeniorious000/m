@@ -22,7 +22,7 @@ def ask(message: str = Argument(""), model: str = default_model):
         out = ""
         for i in get_client().generate(messages, model=model):
             out += i
-            print(i, end="")
+            print(i, end="", flush=True)
         print()
 
         messages.append(assistant > out)
