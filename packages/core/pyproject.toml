@@ -9,6 +9,11 @@ dependencies = [
     "typer-slim~=0.12.5",
 ]
 
+[project.optional-dependencies]
+all = [
+    "mm-chat",
+]
+
 [project.scripts]
 m = "m.cli.main:app"
 

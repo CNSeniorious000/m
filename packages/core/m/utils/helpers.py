@@ -8,6 +8,9 @@ class Unset:
     def __getitem__(self, _):
         return self
 
+    def get(self, _, default=None):
+        return default
+
     def items(self):
         return iter(())
 

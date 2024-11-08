@@ -3,12 +3,14 @@ name = "m-monorepo"
 version = "0"
 requires-python = ">=3.12"
 dependencies = [
+    "mm-chat",
     "muspi-merol",
     "ruff~=0.7.2",
 ]
 
 [tool.uv.sources]
 muspi-merol = { workspace = true }
+mm-chat = { workspace = true }
 
 [tool.uv.workspace]
 members = ["packages/*"]
