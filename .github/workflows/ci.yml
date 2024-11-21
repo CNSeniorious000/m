@@ -34,11 +34,17 @@ jobs:
 
   publish:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir: [core, chat]
+      fail-fast: false
     needs: [check, typos]
     permissions:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: packages/${{ matrix.dir }}
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -46,7 +52,7 @@ jobs:
       - name: Build packages
         run: |
           pip install uv --disable-pip-version-check
-          uv build --all
+          uv build packages/${{ matrix.dir }}
       - name: Publish to PyPI
         continue-on-error: true
         run: uv publish
