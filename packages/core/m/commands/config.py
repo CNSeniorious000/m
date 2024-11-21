@@ -3,7 +3,7 @@ from contextlib import suppress
 
 from m.utils.console import console
 from rich import print_json
-from typer import Exit, Typer
+from typer import Exit, Typer, launch
 from typer.params import Argument, Option
 
 from ..config.load import load_config, read_json_config, write_json_config
@@ -18,8 +18,11 @@ def config(
     item: str = Argument("", help="The item to retrieve from the config. Leave empty to retrieve the entire config."),
     value: str = Argument("", help="The value to set the item to. Leave empty to retrieve the item."),
     local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent config in User's home directory instead of this python venv.", show_default=False),
+    open_config_file: bool = Option(False, "--open", "-o", help="Open the config file in the default editor."),
 ):
     store = local_store if local else global_store
+    if open_config_file:
+        raise Exit(launch(str(store / "config.json")))
     config = wrap_raw_config(read_json_config(store)) if item else load_config()  # merge unless the verb is set
 
     match (item, value):
