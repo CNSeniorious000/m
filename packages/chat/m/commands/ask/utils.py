@@ -15,7 +15,7 @@ def _get_session():
         session = PromptSession()
 
     if "Input is not a terminal (fd=0)" in io.getvalue():  # Warning: Input is not a terminal (fd=0).
-        return PromptSession(input=create_input(open("/dev/tty")))  # noqa: PTH123, SIM115
+        return PromptSession(input=create_input(open("/dev/tty")))  # noqa: PTH123
 
     return session
 
