@@ -22,7 +22,10 @@ def config(
 ):
     store = local_store if local else global_store
     if open_config_file:
-        raise Exit(launch(str(store / "config.json")))
+        code = launch(path := str(store / "config.json"))
+        if code:
+            console.print(f"\n :warning: Failed to open {path}", style="red", end="\n\n")
+        raise Exit(code)
     config = wrap_raw_config(read_json_config(store)) if item else load_config()  # merge unless the verb is set
 
     match (item, value):
