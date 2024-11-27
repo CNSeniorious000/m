@@ -24,7 +24,11 @@ def run(cmd: str, shell=False):
 
     print_command(cmd, shell, argv[2:])
 
-    exit((Popen(f"{cmd} {join(argv[2:])}", shell=True) if shell else Popen(split(cmd) + argv[2:])).wait())
+    try:
+        exit((Popen(f"{cmd} {join(argv[2:])}", shell=True) if shell else Popen(split(cmd) + argv[2:])).wait())
+    except KeyboardInterrupt:
+        console.print(" Command interrupted by user.\n", style="red")
+        exit(1)
 
 
 def get_runner(item: Alias | str):
