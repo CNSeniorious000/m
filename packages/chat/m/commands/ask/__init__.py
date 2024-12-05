@@ -23,7 +23,7 @@ def ask(message: str = Argument(""), model: str = default_model):
 
     while True:
         out = ""
-        with Live(vertical_overflow="visible") as live:
+        with Live(vertical_overflow="crop") as live:
             for i in get_client().generate(messages, model=model):
                 out += i
                 live.update(TruncatedMarkdown(out), refresh=True)
