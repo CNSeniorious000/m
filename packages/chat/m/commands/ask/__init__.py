@@ -1,9 +1,12 @@
 from sys import stdin
 
 from promplate.prompt.chat import Message, assistant, system, user
+from rich.live import Live
+from rich.markdown import Markdown
 from typer import Argument, Typer
 
 from .impl import default_model, get_client
+from .markdown import TruncatedMarkdown
 from .utils import get_user_message
 
 app = Typer()
@@ -20,10 +23,11 @@ def ask(message: str = Argument(""), model: str = default_model):
 
     while True:
         out = ""
-        for i in get_client().generate(messages, model=model):
-            out += i
-            print(i, end="", flush=True)
-        print()
+        with Live(vertical_overflow="visible") as live:
+            for i in get_client().generate(messages, model=model):
+                out += i
+                live.update(TruncatedMarkdown(out), refresh=True)
+            live.update(Markdown(out), refresh=True)
 
         messages.append(assistant > out)
 
