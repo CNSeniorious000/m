@@ -1,6 +1,6 @@
 [project]
 name = "mm-read"
-version = "0.0.1"
+version = "0.0.1.post1"
 description = "Readability utilities for personal use"
 requires-python = ">=3.12"
 dependencies = [
@@ -14,4 +14,4 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm.build]
-includes = ["m"]
+includes = ["m", "mm_read"]
