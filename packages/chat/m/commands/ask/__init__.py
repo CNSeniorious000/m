@@ -2,11 +2,10 @@ from sys import stdin
 
 from promplate.prompt.chat import Message, assistant, system, user
 from rich.live import Live
-from rich.markdown import Markdown
 from typer import Argument, Typer
 
 from .impl import default_model, get_client
-from .markdown import TruncatedMarkdown
+from .markdown import Markdown, TruncatedMarkdown
 from .utils import get_user_message
 
 app = Typer()

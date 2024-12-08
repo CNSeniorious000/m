@@ -1,4 +1,19 @@
-from rich.markdown import Markdown
+from typing import ClassVar
+
+from rich.markdown import CodeBlock, Markdown
+from rich.syntax import Syntax
+from rich.text import Text
+
+
+class Markdown(Markdown):
+    class CleanCodeBlock(CodeBlock):
+        def __rich_console__(self, console, options):
+            code = str(self.text).rstrip()
+            yield Text(f"```{self.lexer_name}", style="dim")
+            yield Syntax(code, self.lexer_name, theme=self.theme, background_color="default", word_wrap=True)
+            yield Text("```", style="dim")
+
+    elements: ClassVar = {**Markdown.elements, "fence": CleanCodeBlock}
 
 
 class TruncatedMarkdown(Markdown):
