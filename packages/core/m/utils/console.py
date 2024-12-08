@@ -8,7 +8,5 @@ def print_version():
 
     from ..version import __version__
 
-    console = Console(highlight=False)
-
     console.print(f"\n [r] m [/] {__version__}", end=" ", style="violet")
     console.print(python_implementation(), python_version(), style="dim", end="\n\n")
