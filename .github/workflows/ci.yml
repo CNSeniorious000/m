@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dir: [core, chat]
+        dir: [core, chat, read]
       fail-fast: false
     needs: [check, typos]
     permissions:

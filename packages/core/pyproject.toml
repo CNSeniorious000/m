@@ -12,6 +12,7 @@ dependencies = [
 [project.optional-dependencies]
 all = [
     "mm-chat",
+    "mm-read",
 ]
 
 [project.scripts]
