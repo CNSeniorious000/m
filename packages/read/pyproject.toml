@@ -1,12 +1,12 @@
 [project]
 name = "mm-read"
-version = "0.0.2"
+version = "0.0.3"
 description = "Readability utilities for personal use"
 requires-python = ">=3.12"
 dependencies = [
     "html2text2~=1.0.0",
     "niquests~=3.11.2",
-    "python-readability~=0.1.0",
+    "python-readability~=1.0.0rc0",
 ]
 
 [build-system]
