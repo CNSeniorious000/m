@@ -42,4 +42,4 @@ def load_config():
 def write_json_config(path: Path, config: Config):
     path /= "config.json"
     ensure_parents_exist(path)
-    path.write_text(dumps(config, indent=2, ensure_ascii=False))
+    path.write_text(dumps(config, indent=2, ensure_ascii=False), "utf-8")
