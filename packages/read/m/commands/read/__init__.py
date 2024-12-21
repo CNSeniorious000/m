@@ -1,4 +1,4 @@
-from sys import stdin
+from sys import stdin, stdout
 
 from m.utils.console import console
 from mm_read.extract import extract_text
@@ -21,4 +21,4 @@ def read(url: str):
     if console.is_terminal:
         console.print(Markdown(markdown))
     else:
-        print(markdown)
+        stdout.buffer.write(markdown.encode(console.encoding, errors="ignore"))
