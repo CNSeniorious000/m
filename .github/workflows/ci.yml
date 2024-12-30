@@ -18,19 +18,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: 3.12
+          enable-cache: true
+          cache-dependency-glob: |
+            **/pyproject.toml
       - name: Install dependencies
         run: |
-          pip install uv --disable-pip-version-check
-          uv export --no-hashes | uv pip install -r - --system
+          uv pip install -r pyproject.toml basedpyright
       - name: Linting
         run: |
           ruff format --check --diff
           ruff check --diff
       - name: Check typing
-        run: npx pyright
+        run: basedpyright
 
   publish:
     runs-on: ubuntu-latest
@@ -46,12 +48,11 @@ jobs:
         with:
           sparse-checkout: packages/${{ matrix.dir }}
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: 3.12
       - name: Build packages
         run: |
-          pip install uv --disable-pip-version-check
           uv build packages/${{ matrix.dir }}
       - name: Publish to PyPI
         continue-on-error: true
