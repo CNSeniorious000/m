@@ -8,7 +8,7 @@ def get_markdown(url: str):
     if url.startswith("http"):
         html, baseurl = request(url)
     else:
-        html = Path(url).read_text()
+        html = Path(url).read_text("utf-8")
         baseurl = url
 
     return extract_text(html, baseurl)

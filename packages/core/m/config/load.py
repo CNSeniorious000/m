@@ -24,7 +24,7 @@ def read_toml_config(path: Path):
         if path.is_file():
             from tomllib import loads
 
-            return loads(path.read_text()).get("tool", {}).get("m", {})
+            return loads(path.read_text("utf-8")).get("tool", {}).get("m", {})
 
     return UNSET
 
