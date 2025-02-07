@@ -31,7 +31,7 @@ def alias(
                         cmd, shell = item["cmd"], item["shell"]
                     else:
                         cmd, shell = item, False
-                    console.print(f" {alias.rjust(max_len)}: [{'green' if shell else 'blue' }]{cmd}")
+                    console.print(f" {alias.rjust(max_len)}: [{'green' if shell else 'blue'}]{cmd}")
                 print()
 
         case (alias, ""):
