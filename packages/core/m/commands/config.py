@@ -26,7 +26,7 @@ def config(
         if code:
             console.print(f"\n :warning: Failed to open {path}", style="red", end="\n\n")
         raise Exit(code)
-    config = wrap_raw_config(read_json_config(store)) if item else load_config()  # merge unless the verb is set
+    config = wrap_raw_config(read_json_config(store)) if value or not local else load_config()  # merge unless the value is set or global config is requested
 
     match (item, value):
         case ("", ""):
