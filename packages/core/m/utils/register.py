@@ -1,4 +1,10 @@
+from pathlib import Path
+from sys import path
+
 from typer import Typer
+
+if (cwd := str(Path.cwd())) not in path:
+    path.append(cwd)
 
 
 def get_commands():
