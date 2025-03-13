@@ -3,7 +3,7 @@ from sys import stdin
 from promplate.prompt.chat import Message, assistant, system, user
 from rich.live import Live
 from rich.markdown import Markdown
-from typer import Argument, Typer
+from typer import Argument, Option, Typer
 
 from .impl import default_model, get_client
 from .markdown import TruncatedMarkdown
@@ -13,7 +13,7 @@ app = Typer()
 
 
 @app.command()
-def ask(message: str = Argument(""), model: str = default_model):
+def ask(message: str = Argument(""), model: str = Option(default_model, "--model", "-m")):
     if not message:
         message = get_user_message()
 
