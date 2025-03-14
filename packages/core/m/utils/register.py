@@ -8,7 +8,7 @@ from typer import Typer
 if (cwd := str(Path.cwd())) not in path:
     path.append(cwd)
 
-if getenv("VIRTUAL_ENV") is not None and (venv_python := which("python")) is not None and not Path(venv_python).samefile(executable):
+if getenv("VIRTUAL_ENV") is not None and (venv_python := which("python")) is not None and venv_python != executable:
     from site import addsitepackages
     from subprocess import run
 
