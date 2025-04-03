@@ -1,20 +1,10 @@
-from os import getenv
 from pathlib import Path
-from shutil import which
-from sys import executable, path
+from sys import path
 
 from typer import Typer
 
 if (cwd := str(Path.cwd())) not in path:
     path.append(cwd)
-
-if getenv("VIRTUAL_ENV") is not None and (venv_python := which("python")) is not None and venv_python != executable:
-    from site import addsitepackages
-    from subprocess import run
-
-    site_packages: list[str] = eval(run([venv_python, "-c", "import site; print(repr(site.getsitepackages()))"], capture_output=True, text=True, check=True).stdout)
-    path.extend(site_packages)
-    addsitepackages(set(site_packages))
 
 
 def get_commands():
