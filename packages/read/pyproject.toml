@@ -4,7 +4,7 @@ version = "0.0.3.2"
 description = "Readability utilities for personal use"
 requires-python = ">=3.12"
 dependencies = [
-    "html2text2~=1.0.0",
+    "html2text2>=1.0,<1.2",
     "niquests~=3.11.2",
     "python-readability~=1.0.0rc0",
 ]
