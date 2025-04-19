@@ -26,7 +26,7 @@ jobs:
             **/pyproject.toml
       - name: Install dependencies
         run: |
-          uv pip install -r pyproject.toml basedpyright
+          uv pip install -r pyproject.toml basedpyright --color always
       - name: Linting
         run: |
           ruff format --check --diff
@@ -53,10 +53,10 @@ jobs:
           python-version: 3.12
       - name: Build packages
         run: |
-          uv build packages/${{ matrix.dir }}
+          uv build packages/${{ matrix.dir }} --color always
       - name: Publish to PyPI
         continue-on-error: true
-        run: uv publish
+        run: uv publish --color always
 
   format:
     runs-on: ubuntu-latest
