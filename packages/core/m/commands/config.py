@@ -17,16 +17,16 @@ app = Typer()
 def config(
     item: str = Argument("", help="The item to retrieve from the config. Leave empty to retrieve the entire config."),
     value: str = Argument("", help="The value to set the item to. Leave empty to retrieve the item."),
-    local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent config in User's home directory instead of this python venv.", show_default=False),
+    globally: bool = Option(False, "--global", "-g", help="Persistent config in User's home directory instead of this python venv.", show_default=False),
     open_config_file: bool = Option(False, "--open", "-o", help="Open the config file in the default editor."),
 ):
-    store = local_store if local else global_store
+    store = global_store if globally else local_store
     if open_config_file:
         code = launch(path := str(store / "config.json"))
         if code:
             console.print(f"\n :warning: Failed to open {path}", style="red", end="\n\n")
         raise Exit(code)
-    config = wrap_raw_config(read_json_config(store)) if value or not local else load_config()  # merge unless the value is set or global config is requested
+    config = wrap_raw_config(read_json_config(store)) if value or globally else load_config()  # merge unless the value is set or global config is requested
 
     match (item, value):
         case ("", ""):

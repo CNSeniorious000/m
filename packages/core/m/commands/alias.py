@@ -15,10 +15,10 @@ app = Typer()
 def alias(
     alias: str = Argument("", help="The alias to create or retrieve."),
     command: str = Argument("", help="The command to alias."),
-    shell: bool = Option(False, "--shell", "-s", flag_value=True, help="Use shell to execute the command."),
-    local: bool = Option(True, "--global", "-g", flag_value=False, help="Persistent alias in User's home directory instead of this python venv.", show_default=False),
+    shell: bool = Option(False, "--shell", "-s", help="Use shell to execute the command."),
+    globally: bool = Option(False, "--global", "-g", help="Persistent alias in User's home directory instead of this python venv.", show_default=False),
 ):
-    store = local_store if local else global_store
+    store = global_store if globally else local_store
     config = wrap_raw_config(read_json_config(store)) if command else load_config()  # merge unless the verb is set
 
     match (alias, command):
