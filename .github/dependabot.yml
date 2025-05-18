@@ -13,6 +13,10 @@ updates:
     directory: /packages/chat
     schedule:
       interval: daily
+  - package-ecosystem: uv
+    directory: /packages/read
+    schedule:
+      interval: daily
   - package-ecosystem: github-actions
     directory: /
     schedule:
