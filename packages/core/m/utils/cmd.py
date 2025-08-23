@@ -1,4 +1,5 @@
 import re
+from os import environ
 from sys import argv
 
 from ..config.types import Alias
@@ -18,14 +19,15 @@ def print_command(cmd: str, shell=False, extra_args: list[str] | None = None):
         print("\n")
 
 
-def run(cmd: str, shell=False):
+def run(cmd: str, shell=False, env: dict[str, str] | None = None):
     from shlex import join, split
     from subprocess import Popen
 
     print_command(cmd, shell, argv[2:])
 
     try:
-        exit((Popen(f"{cmd} {join(argv[2:])}", shell=True) if shell else Popen(split(cmd) + argv[2:])).wait())
+        merged_env = env and environ | env
+        exit((Popen(f"{cmd} {join(argv[2:])}", shell=True, env=merged_env) if shell else Popen(split(cmd) + argv[2:], env=merged_env)).wait())
     except KeyboardInterrupt:
         console.print(" Command interrupted by user.\n", style="red")
         exit(1)
@@ -33,5 +35,5 @@ def run(cmd: str, shell=False):
 
 def get_runner(item: Alias | str):
     if isinstance(item, dict):
-        return lambda: run(item["cmd"], item["shell"])
+        return lambda: run(item["cmd"], item["shell"], item.get("env"))
     return lambda: run(item)
