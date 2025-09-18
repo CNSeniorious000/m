@@ -8,13 +8,12 @@ def restart_in_venv_if_needed():
         from site import getsitepackages
         from subprocess import run
 
-        s = set(getsitepackages())
         exit(
             run(
                 [
                     venv_python,
                     "-c",
-                    f"import site,sys; sys.argv={['m', *argv[1:]]}; sys.path.extend({[*s, str(Path(__file__, '../' * 3).resolve())]}); site.addsitepackages({s}); from m.cli.main import app; app()",
+                    f"import site,sys; sys.argv={['m', *argv[1:]]}; [site.addsitedir(p) for p in {getsitepackages()}]; from m.cli.main import app; app()",
                 ]
             ).returncode
         )
