@@ -4,7 +4,7 @@ def restart_in_venv_if_needed():
     from shutil import which
     from sys import argv, executable
 
-    if getenv("VIRTUAL_ENV") is not None and (venv_python := which("python")) is not None and str(Path(venv_python)) != executable:
+    if getenv("VIRTUAL_ENV") is not None and (venv_python := which("python")) is not None and Path(venv_python) != Path(executable):
         from site import getsitepackages
         from subprocess import run
 
