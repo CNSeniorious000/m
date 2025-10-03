@@ -6,7 +6,7 @@ dependencies = [
     "mm-chat",
     "mm-read",
     "muspi-merol",
-    "ruff~=0.12.0",
+    "ruff~=0.13.3",
 ]
 
 [tool.uv.sources]
