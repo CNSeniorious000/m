@@ -30,9 +30,9 @@ class TruncatedMarkdown(Markdown):
 def streaming_markdown(get_md: Callable[[], str]):
     @derived
     def get_ansi():
-        with Console() as console, console.capture() as capture:
-            console.print(TruncatedMarkdown(get_md()))
-        return ANSI(capture.get().rstrip())
+        segments = Console().render(TruncatedMarkdown(get_md()))
+        ansi_output = "".join(seg.style.render(seg.text) if seg.style else seg.text for seg in segments)
+        return ANSI(ansi_output.rstrip())
 
     event = Event()
     lock = Lock()
@@ -66,7 +66,6 @@ def streaming_markdown(get_md: Callable[[], str]):
     try:
         yield
     finally:
-        with Console() as console:
-            app.exit()
-            thread.join()
-            console.print(Markdown(get_md()))
+        app.exit()
+        thread.join()
+        Console().print(Markdown(get_md()))
