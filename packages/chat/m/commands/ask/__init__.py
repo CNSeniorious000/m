@@ -24,7 +24,7 @@ def ask(message: str = Argument(""), model: str = Option(default_model, "--model
         out = signal("")
         with streaming_markdown(out.get):
             for i in get_client().generate(messages, model=model):
-                out.set(out.get() + i)
+                out.update(lambda last: last + i)
 
         messages.append(assistant > out.get())
 

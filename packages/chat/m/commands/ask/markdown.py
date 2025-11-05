@@ -48,10 +48,10 @@ def streaming_markdown(get_md: Callable[[], str]):
     @async_effect(call_immediately=False, task_factory=lambda func: app.loop.create_task(func()))  # type: ignore
     async def update():
         async with lock:
-            get_md()  # track dependency
             app.invalidate()
             await event.wait()
         event.clear()
+        get_md()  # track dependency
 
     # manually connect dependencies and subscribers for the first time
     update.dependencies.add(get_ansi)

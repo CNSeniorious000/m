@@ -4,7 +4,7 @@ version = "0.0.4.1"
 description = "Chat utilities for personal use"
 requires-python = ">=3.12"
 dependencies = [
-    "hmr~=0.7.4",
+    "hmr~=0.7.5",
     "promplate[openai]>=0.3.4.10,<0.3.6.0",
     "prompt-toolkit~=3.0.48",
 ]
