@@ -7,7 +7,8 @@ from prompt_toolkit import ANSI, Application
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from reactivity import async_effect, derived
-from rich.console import Console
+from rich.console import Console, RenderResult
+from rich.containers import Renderables
 from rich.markdown import Markdown
 
 
@@ -24,20 +25,22 @@ class TruncatedMarkdown(Markdown):
             buffer.append(segment)
 
         self.truncated = len(buffer) < len(results)
+        self.original = results
 
         yield from reversed(buffer)
 
 
 @contextmanager
 def streaming_markdown(get_md: Callable[[], str]):
-    truncated = False
+    full_markdown: RenderResult | None = None
 
     @derived
     def get_ansi():
-        nonlocal truncated
         segments = Console().render(m := TruncatedMarkdown(get_md()))
         ansi_output = "".join(seg.style.render(seg.text) if seg.style else seg.text for seg in segments)
-        truncated = m.truncated
+        if m.truncated:
+            nonlocal full_markdown
+            full_markdown = m.original
         return ANSI(ansi_output.rstrip())
 
     event = Event()
@@ -71,9 +74,9 @@ def streaming_markdown(get_md: Callable[[], str]):
     try:
         yield
     finally:
-        if truncated:
+        if full_markdown:
             app.erase_when_done = True
         app.exit()
         thread.join()
-        if truncated:
-            Console().print(Markdown(get_md()))
+        if full_markdown:
+            Console().print(Renderables(full_markdown))
