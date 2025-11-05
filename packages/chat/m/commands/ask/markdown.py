@@ -23,15 +23,21 @@ class TruncatedMarkdown(Markdown):
                 break
             buffer.append(segment)
 
+        self.truncated = len(buffer) < len(results)
+
         yield from reversed(buffer)
 
 
 @contextmanager
 def streaming_markdown(get_md: Callable[[], str]):
+    truncated = False
+
     @derived
     def get_ansi():
-        segments = Console().render(TruncatedMarkdown(get_md()))
+        nonlocal truncated
+        segments = Console().render(m := TruncatedMarkdown(get_md()))
         ansi_output = "".join(seg.style.render(seg.text) if seg.style else seg.text for seg in segments)
+        truncated = m.truncated
         return ANSI(ansi_output.rstrip())
 
     event = Event()
@@ -41,7 +47,6 @@ def streaming_markdown(get_md: Callable[[], str]):
         Layout(Window(FormattedTextControl(get_ansi), always_hide_cursor=True)),
         key_bindings=(kb := KeyBindings()),
         refresh_interval=0,  # disable automatic refresh
-        erase_when_done=True,
         after_render=lambda _: event.set(),
     )
 
@@ -66,6 +71,9 @@ def streaming_markdown(get_md: Callable[[], str]):
     try:
         yield
     finally:
+        if truncated:
+            app.erase_when_done = True
         app.exit()
         thread.join()
-        Console().print(Markdown(get_md()))
+        if truncated:
+            Console().print(Markdown(get_md()))
