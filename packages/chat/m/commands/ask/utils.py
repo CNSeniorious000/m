@@ -35,7 +35,10 @@ def _get_session():
 
 
 def prompt():
-    return _get_session().prompt(" > ", prompt_continuation="   ")
+    try:
+        return _get_session().prompt(" > ", prompt_continuation="   ")
+    finally:
+        print()
 
 
 def get_user_message():
@@ -43,9 +46,6 @@ def get_user_message():
 
     message = prompt()
     if not message:
-        print()
         raise Exit
-
-    print()
 
     return message
