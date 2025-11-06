@@ -9,6 +9,7 @@ from typer import Exit
 @cache
 def _get_session():
     from prompt_toolkit import PromptSession
+    from prompt_toolkit.buffer import Buffer
     from prompt_toolkit.history import FileHistory
     from prompt_toolkit.input import create_input
     from prompt_toolkit.key_binding import KeyBindings
@@ -30,6 +31,16 @@ def _get_session():
 
     if "Input is not a terminal (fd=0)" in io.getvalue():  # Warning: Input is not a terminal (fd=0).
         return PromptSession(input=create_input(open("/dev/tty")), history=history, style=style, key_bindings=kb)  # noqa: PTH123
+
+    buf = session.default_buffer
+    _accept = buf.accept_handler
+    assert _accept is not None
+
+    def accept(buf: Buffer):
+        buf.text = buf.text.strip()
+        return _accept(buf)
+
+    buf.accept_handler = accept
 
     return session
 
