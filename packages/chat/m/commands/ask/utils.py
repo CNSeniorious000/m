@@ -43,9 +43,7 @@ def prompt():
 
 def get_user_message():
     print()
-
-    message = prompt()
-    if not message:
+    if message := prompt():
+        return message
+    else:
         raise Exit
-
-    return message
