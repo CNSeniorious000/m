@@ -3,7 +3,14 @@ from typer import Typer
 from ..utils.register import get_commands
 from . import config
 
-app = Typer(help="CLI utilities for personal use", no_args_is_help=True, add_completion=False, pretty_exceptions_enable=False, rich_markup_mode="rich", context_settings={"help_option_names": ["-h", "--help"]})
+app = Typer(
+    help="CLI utilities for personal use",
+    no_args_is_help=True,
+    add_completion=False,
+    pretty_exceptions_enable=False,
+    rich_markup_mode="rich",
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 
 
 # load other commands
