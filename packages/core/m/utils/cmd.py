@@ -26,7 +26,7 @@ def run(cmd: str, shell=False, env: dict[str, str] | None = None):
     print_command(cmd, shell, argv[2:])
 
     try:
-        merged_env = env and environ | env
+        merged_env = environ | env if env else None
         exit((Popen(f"{cmd} {join(argv[2:])}", shell=True, env=merged_env) if shell else Popen(split(cmd) + argv[2:], env=merged_env)).wait())
     except KeyboardInterrupt:
         console.print(" Command interrupted by user.\n", style="red")
