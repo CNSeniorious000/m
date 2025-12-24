@@ -1,11 +1,11 @@
 [project]
 name = "mm-read"
-version = "0.0.4"
+version = "0.0.4.1"
 description = "Readability utilities for personal use"
 requires-python = ">=3.12"
 dependencies = [
     "html2text2~=1.0",
-    "mistune~=3.1.4",
+    "mistune~=3.1",
     "niquests~=3.11",
     "python-readability~=1.0.0rc0",
 ]
