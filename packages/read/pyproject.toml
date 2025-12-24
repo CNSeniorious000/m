@@ -5,7 +5,7 @@ description = "Readability utilities for personal use"
 requires-python = ">=3.12"
 dependencies = [
     "html2text2~=1.0",
-    "mistune~=3.1.4",
+    "mistune>=3.1.4,<3.3.0",
     "niquests~=3.11",
     "python-readability~=1.0.0rc0",
 ]
