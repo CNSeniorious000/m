@@ -46,6 +46,9 @@ class DictWrapper(dict):
         except KeyError:
             return UNSET
 
+    def items(self):
+        return ({k: _wrap(v) for k, v in super().items()}).items()
+
 
 def wrap_raw_config(data: dict | Unset) -> Config:
     return DictWrapper(data if isinstance(data, dict) else {})  # type: ignore
