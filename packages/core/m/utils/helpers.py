@@ -22,11 +22,13 @@ UNSET = Unset()
 
 
 def _wrap(value):
-    if isinstance(value, list):
-        return ListWrapper(value)
-    if isinstance(value, dict):
-        return DictWrapper(value)
-    return value
+    match value:
+        case list():
+            return ListWrapper(value)
+        case dict():
+            return DictWrapper(value)
+        case _:
+            return value
 
 
 class ListWrapper(list):
