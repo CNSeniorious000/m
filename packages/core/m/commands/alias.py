@@ -36,7 +36,7 @@ def alias(
                 print()
 
         case (alias, ""):
-            if isinstance(item := config["aliases"][alias], str):
+            if isinstance(item := config["aliases"][alias], str | list):
                 print_command(item)
             elif isinstance(item, dict):
                 print_command(item["cmd"], item["shell"])
@@ -44,7 +44,7 @@ def alias(
         case (alias, command):
             new_config: Config = dict(config) if isinstance(config, dict) else {}  # type: ignore
             env_map = dict(env.split("=", 1) for env in env)
-            item: Alias | str = {"cmd": command, "shell": shell, "env": env_map} if shell or env_map else command
+            item: Alias | str | list[str] = {"cmd": command, "shell": shell, "env": env_map} if shell or env_map else command
             if config["aliases"]:
                 new_config["aliases"][alias] = item
             else:
