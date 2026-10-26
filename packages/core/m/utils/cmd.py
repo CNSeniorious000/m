@@ -8,10 +8,10 @@ from ..utils.console import console
 unsafe = re.compile(r"['\" ]", re.ASCII).search  # copied from shlex
 
 
-def print_command(cmd: str, shell=False, extra_args: list[str] | None = None):
+def print_command(cmd: str | list[str], shell=False, extra_args: list[str] | None = None):
     from shlex import quote, split
 
-    console.print("\n [d]>>", *(quote(i) if unsafe(i) else i for i in split(cmd)), end="", style="green" if shell else "blue")
+    console.print("\n [d]>>", *(quote(i) if unsafe(i) else i for i in (split(cmd) if isinstance(cmd, str) else cmd)), end="", style="green" if shell else "blue")
 
     if extra_args:
         console.print(" " + " ".join(extra_args), style="yellow", end="\n\n")
@@ -19,9 +19,12 @@ def print_command(cmd: str, shell=False, extra_args: list[str] | None = None):
         print("\n")
 
 
-def run(cmd: str, shell=False, env: dict[str, str] | None = None):
+def run(cmd: str | list[str], shell=False, env: dict[str, str] | None = None):
     from shlex import join, split
     from subprocess import Popen
+
+    if isinstance(cmd, list):
+        cmd = join(cmd)
 
     print_command(cmd, shell, argv[2:])
 
@@ -33,7 +36,7 @@ def run(cmd: str, shell=False, env: dict[str, str] | None = None):
         exit(1)
 
 
-def get_runner(item: Alias | str):
+def get_runner(item: Alias | str | list[str]):
     if isinstance(item, dict):
         return lambda: run(item["cmd"], item["shell"], item.get("env"))
     return lambda: run(item)
