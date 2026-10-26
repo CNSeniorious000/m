@@ -1,3 +1,5 @@
+from shlex import join, split
+
 from typer import Typer
 from typer.params import Argument, Option
 
@@ -32,7 +34,7 @@ def alias(
                         cmd, shell = item["cmd"], item["shell"]
                     else:
                         cmd, shell = item, False
-                    console.print(f" {alias.rjust(max_len)}: [{'green' if shell else 'blue'}]{cmd}")
+                    console.print(f" {alias.rjust(max_len)}: [{'green' if shell else 'blue'}]{join(cmd) if isinstance(cmd, list) else cmd}")
                 print()
 
         case (alias, ""):
@@ -44,7 +46,8 @@ def alias(
         case (alias, command):
             new_config: Config = dict(config) if isinstance(config, dict) else {}  # type: ignore
             env_map = dict(env.split("=", 1) for env in env)
-            item: Alias | str | list[str] = {"cmd": command, "shell": shell, "env": env_map} if shell or env_map else command
+            cmd = command if shell else split(command)
+            item: Alias | str | list[str] = {"cmd": cmd, "shell": shell, "env": env_map} if shell or env_map else cmd
             if config["aliases"]:
                 new_config["aliases"][alias] = item
             else:

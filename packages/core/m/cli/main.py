@@ -1,3 +1,5 @@
+from shlex import join
+
 from typer import Typer
 
 from ..utils.register import get_commands
@@ -25,4 +27,5 @@ for sub_app in get_commands():
 # load aliases
 
 for alias, item in config["aliases"].items():
-    app.command(name=alias, help=f"[dim]alias of[/] {item['cmd'] if isinstance(item, dict) else item!r}")(lambda: 0)  # fake
+    cmd = item["cmd"] if isinstance(item, dict) else item
+    app.command(name=alias, help=f"[dim]alias of[/] {join(cmd) if isinstance(cmd, list) else cmd!r}")(lambda: 0)  # fake
